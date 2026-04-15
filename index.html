@@ -6,25 +6,202 @@
   <title>BĐS Giá Rẻ</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:14px;font-family:Arial,sans-serif;background:#f3f4f6;color:#1f2937}
-.wrap{max-width:1200px;margin:0 auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);transition:.18s}
-.card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.14)}
-.thumb-wrap{position:relative;display:block;aspect-ratio:4/3;background:#e5e7eb;overflow:hidden}
-.thumb{width:100%;height:100%;object-fit:cover;display:block}
-.badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap;z-index:2}
-.badge{padding:5px 8px;border-radius:999px;font-size:11px;font-weight:700;color:#fff}
-.badge-hot{background:#ef4444}
-.badge-sale{background:#f59e0b}
-.badge-type{background:#111827}
-.content{padding:13px}
-.title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:18px;font-weight:700;line-height:1.35;min-height:48px;margin:0 0 8px;color:#111;text-decoration:none}
-.title:hover{color:#c81e1e}
-.meta{font-size:13px;color:#6b7280;margin-bottom:10px;min-height:20px}
-.price{font-size:24px;font-weight:800;color:#dc2626;margin-bottom:10px}
-.btn{display:inline-block;padding:9px 12px;border-radius:10px;background:#111;color:#fff;text-decoration:none;font-size:13px}
-.loading,.empty{text-align:center;padding:30px;color:#6b7280}
+body{margin:0;padding:10px;font-family:Arial,sans-serif;background:#f5f7fb;color:#1f2937}
+.wrap{max-width:1280px;margin:0 auto}
+.scroller{
+  overflow-x:auto;
+  overflow-y:hidden;
+  -ms-overflow-style:none;
+  scrollbar-width:none;
+  cursor:grab;
+  padding-bottom:4px;
+}
+.scroller::-webkit-scrollbar{display:none}
+.scroller.dragging{cursor:grabbing;user-select:none}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+  min-width:1120px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #dbe3ee;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+  transition:.2s ease;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.10)}
+
+.thumb-wrap{
+  position:relative;
+  display:block;
+  aspect-ratio:4/3;
+  overflow:hidden;
+  background:#e5e7eb;
+}
+.thumb{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.badge-left{
+  position:absolute;
+  top:12px;
+  left:12px;
+  z-index:3;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.badge-chip{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  color:#fff;
+  line-height:1;
+  box-shadow:0 2px 6px rgba(0,0,0,.14);
+}
+.badge-orange{background:#f59e0b}
+.badge-red{background:#ef4444}
+.badge-dark{background:#0f172a}
+
+.badge-corner{
+  position:absolute;
+  top:0;
+  right:0;
+  width:92px;
+  height:92px;
+  overflow:hidden;
+  z-index:2;
+}
+.badge-corner span{
+  position:absolute;
+  top:16px;
+  right:-28px;
+  width:120px;
+  text-align:center;
+  background:#f97316;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  padding:6px 0;
+  transform:rotate(45deg);
+  box-shadow:0 2px 6px rgba(0,0,0,.16);
+}
+
+.content{padding:14px 16px 16px}
+.title{
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  min-height:64px;
+  margin:0 0 8px;
+  color:#1f2937;
+  text-decoration:none;
+  font-size:17px;
+  line-height:1.45;
+  font-weight:700;
+}
+.title:hover{color:#d9480f}
+
+.desc{
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  min-height:66px;
+  color:#64748b;
+  font-size:14px;
+  line-height:1.55;
+  margin-bottom:10px;
+}
+
+.meta{
+  display:grid;
+  gap:6px;
+  margin-bottom:12px;
+}
+.meta-row{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  color:#64748b;
+  font-size:14px;
+  line-height:1.45;
+}
+.meta-ico{
+  width:16px;
+  flex:0 0 16px;
+  text-align:center;
+  color:#64748b;
+  font-size:12px;
+  margin-top:2px;
+}
+
+.sep{
+  height:1px;
+  background:#e2e8f0;
+  margin:10px 0 12px;
+}
+
+.bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.price{
+  color:#f97316;
+  font-size:18px;
+  font-weight:800;
+  line-height:1.2;
+}
+.btn{
+  display:inline-block;
+  padding:10px 14px;
+  border-radius:12px;
+  background:#0f766e;
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.btn:hover{opacity:.92}
+
+.loading,.empty{
+  text-align:center;
+  color:#64748b;
+  padding:28px 10px;
+}
+
+@media (max-width:991px){
+  .grid{
+    grid-template-columns:repeat(2,minmax(300px,1fr));
+    min-width:620px;
+  }
+}
+@media (max-width:640px){
+  body{padding:8px}
+  .grid{
+    grid-template-columns:repeat(1,minmax(280px,1fr));
+    min-width:300px;
+  }
+  .title{font-size:16px;min-height:58px}
+  .desc{font-size:13px;min-height:60px}
+  .meta-row{font-size:13px}
+  .price{font-size:17px}
+  .btn{font-size:13px;padding:9px 12px}
+}
 </style>
 </head>
 <body>
@@ -33,83 +210,124 @@ body{margin:0;padding:14px;font-family:Arial,sans-serif;background:#f3f4f6;color
 </div>
 
 <script>
-function cleanTitle(str){
-  return (str || '').replace(/\s+/g,' ').replace(/^[🔥⭐✔✅]+\s*/,'').trim();
+function cleanText(str){
+  return (str || '')
+    .replace(/<br\s*\/?>/gi,' ')
+    .replace(/<[^>]*>/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
 }
 
-function extractPrice(title){
-  const t = title.toLowerCase();
+function cleanTitle(str){
+  return cleanText(str).replace(/^[🔥⭐✔✅]+\s*/,'').trim();
+}
 
-  let m = t.match(/(?:giá|chỉ)\s*([0-9.,x]+)\s*t[ỷy]/i);
+function extractTag(html, tag){
+  var re = new RegExp('\\['+tag+'\\]([\\s\\S]*?)\\[\\/'+tag+'\\]','i');
+  var m = html.match(re);
+  return m ? cleanText(m[1]) : '';
+}
+
+function extractPrice(title, html){
+  var combined = (title + ' ' + html).toLowerCase();
+
+  var m = combined.match(/\[giaban\]([\s\S]*?)\[\/giaban\]/i);
+  if (m) return cleanText(m[1]);
+
+  m = combined.match(/(?:giá|chỉ)\s*([0-9]+(?:[.,][0-9x]+)?)\s*t[ỷy]/i);
   if (m) return m[1].replace(/x/g,'').replace(',', '.') + ' tỷ';
 
-  m = t.match(/([0-9.,x]+)\s*t[ỷy]/i);
+  m = combined.match(/([0-9]+(?:[.,][0-9x]+)?)\s*t[ỷy]/i);
   if (m) return m[1].replace(/x/g,'').replace(',', '.') + ' tỷ';
 
-  m = t.match(/([0-9.,]+)\s*tr/i);
+  m = combined.match(/([0-9]+(?:[.,][0-9]+)?)\s*tr[iệê]u/i);
   if (m) return m[1].replace(',', '.') + ' triệu';
 
   return 'Liên hệ';
 }
 
-function extractArea(title){
-  const m = title.match(/(\d{2,4})\s*m2/i);
-  return m ? m[1] + 'm²' : '';
+function extractArea(title, html){
+  var area = extractTag(html,'dientich');
+  if (area) return area;
+  var m = title.match(/(\d{2,5}(?:[.,]\d+)?)\s*m2/i);
+  return m ? m[1] + ' m2' : '';
 }
 
-function extractLocation(title){
-  const patterns = [
-    /(quận\s*\d+)/i,
-    /(q\.?\s*\d+)/i,
-    /(gò vấp)/i,
-    /(hóc môn)/i,
-    /(củ chi)/i,
-    /(tân bình)/i,
-    /(thủ đức)/i,
-    /(phường\s*[\w\d]+)/i,
-    /(p\.?\s*[\w\d]+)/i
+function extractLocation(title, html){
+  var loc = extractTag(html,'vitri');
+  if (loc) return loc;
+
+  var patterns = [
+    /(quận\s*\d+)/i, /(q\.?\s*\d+)/i, /(gò vấp)/i, /(hóc môn)/i,
+    /(củ chi)/i, /(tân bình)/i, /(tân phú)/i, /(thủ đức)/i,
+    /(phường\s*[\w\d]+)/i, /(p\.?\s*[\w\d]+)/i
   ];
-  for (let i = 0; i < patterns.length; i++) {
-    const m = title.match(patterns[i]);
+  for (var i=0;i<patterns.length;i++){
+    var m = title.match(patterns[i]);
     if (m) return m[1];
   }
   return '';
 }
 
-function detectType(title){
-  const t = title.toLowerCase();
+function extractType(title, html){
+  var loai = extractTag(html,'loai');
+  if (loai) return loai;
+
+  var t = title.toLowerCase();
   if (t.includes('đất')) return 'Đất';
   if (t.includes('biệt thự')) return 'Biệt thự';
   if (t.includes('căn hộ')) return 'Căn hộ';
   if (t.includes('nhà vườn')) return 'Nhà vườn';
-  if (t.includes('nhà')) return 'Nhà';
+  if (t.includes('nhà')) return 'Nhà phố';
   return 'BĐS';
 }
 
+function extractBadge(html, title){
+  var hot = extractTag(html,'hot');
+  var phaply = extractTag(html,'phaply');
+  var badges = [];
+
+  if (phaply) badges.push({text: phaply, cls:'badge-orange'});
+  if (!phaply && /sổ đỏ|shr|shr/i.test(html + ' ' + title)) badges.push({text:'SHR', cls:'badge-orange'});
+
+  if (hot) badges.push({text: hot, cls:'badge-red'});
+  return badges;
+}
+
 function shortTitle(t){
-  return t
-    .replace(/(giá|chỉ).*$/i,'')
-    .replace(/\d+\s*m2/ig,'')
+  return cleanTitle(t)
+    .replace(/(?:,\s*)?(giá|chỉ)\s*[0-9.,x]+\s*t[ỷy].*$/i,'')
+    .replace(/(?:,\s*)?[0-9.,x]+\s*t[ỷy].*$/i,'')
+    .replace(/(?:,\s*)?\d{2,5}(?:[.,]\d+)?\s*m2/ig,'')
     .replace(/^bán\s+/i,'')
     .replace(/\s{2,}/g,' ')
     .trim()
     .replace(/[,\-–|:;]+$/,'');
 }
 
-function extractBloggerImage(entry){
-  let rawImg = '';
-  let html = '';
+function extractDesc(entry){
+  var html = (entry.summary && entry.summary.$t) ? entry.summary.$t : '';
+  if (!html && entry.content && entry.content.$t) html = entry.content.$t;
 
-  // luôn lấy content/summary trước để ưu tiên ảnh thật trong bài
-  html = (entry.content && entry.content.$t) ? entry.content.$t : '';
+  var mota = extractTag(html,'mota');
+  if (mota) return mota;
+
+  var chitiet = extractTag(html,'chitiet');
+  if (chitiet) return chitiet;
+
+  return cleanText(html).slice(0,180);
+}
+
+function extractBloggerImage(entry){
+  var rawImg = '';
+  var html = (entry.content && entry.content.$t) ? entry.content.$t : '';
   if (!html && entry.summary && entry.summary.$t) html = entry.summary.$t;
 
-  // 1) ưu tiên <img src="...blogger.googleusercontent.com...">
   if (html) {
-    const imgMatches = html.match(/<img[^>]+src="([^"]+)"/ig);
+    var imgMatches = html.match(/<img[^>]+src="([^"]+)"/ig);
     if (imgMatches) {
-      for (let i = 0; i < imgMatches.length; i++) {
-        const m = imgMatches[i].match(/src="([^"]+)"/i);
+      for (var i=0;i<imgMatches.length;i++) {
+        var m = imgMatches[i].match(/src="([^"]+)"/i);
         if (m && m[1] && m[1].indexOf('blogger.googleusercontent.com/img') !== -1) {
           rawImg = m[1];
           break;
@@ -118,48 +336,45 @@ function extractBloggerImage(entry){
     }
   }
 
-  // 2) nếu chưa có thì lấy từ <a href="...jpg"> ảnh lớn
   if (!rawImg && html) {
-    const linkMatches = html.match(/<a[^>]+href="([^"]+)"/ig);
+    var linkMatches = html.match(/<a[^>]+href="([^"]+)"/ig);
     if (linkMatches) {
-      for (let i = 0; i < linkMatches.length; i++) {
-        const m = linkMatches[i].match(/href="([^"]+)"/i);
-        if (
-          m && m[1] &&
-          m[1].indexOf('blogger.googleusercontent.com/img') !== -1 &&
-          /\.(jpg|jpeg|png|webp)(\?|$)/i.test(m[1])
-        ) {
-          rawImg = m[1];
+      for (var j=0;j<linkMatches.length;j++) {
+        var n = linkMatches[j].match(/href="([^"]+)"/i);
+        if (n && n[1] && n[1].indexOf('blogger.googleusercontent.com/img') !== -1 && /\.(jpg|jpeg|png|webp)(\?|$)/i.test(n[1])) {
+          rawImg = n[1];
           break;
         }
       }
     }
   }
 
-  // 3) cuối cùng mới fallback sang media$thumbnail
   if (!rawImg && entry.media$thumbnail && entry.media$thumbnail.url) {
     rawImg = entry.media$thumbnail.url;
   }
 
-  // 4) resize về ảnh nhẹ
   if (rawImg && rawImg.indexOf('blogger.googleusercontent.com/img') !== -1) {
     return rawImg
-      .replace('/s72-c/', '/w400-h300-p-k-no-nu/')
-      .replace('/s600/', '/w400-h300-p-k-no-nu/')
-      .replace('/s1280/', '/w400-h300-p-k-no-nu/')
-      .replace('/s1600/', '/w400-h300-p-k-no-nu/')
-      .replace('=s72-c', '=w400-h300-p-k-no-nu')
-      .replace('=s600', '=w400-h300-p-k-no-nu')
-      .replace('=s1280', '=w400-h300-p-k-no-nu')
-      .replace('=s1600', '=w400-h300-p-k-no-nu');
+      .replace('/s72-c/','/w600-h450-p-k-no-nu/')
+      .replace('/s600/','/w600-h450-p-k-no-nu/')
+      .replace('/s1280/','/w600-h450-p-k-no-nu/')
+      .replace('/s1600/','/w600-h450-p-k-no-nu/')
+      .replace('=s72-c','=w600-h450-p-k-no-nu')
+      .replace('=s600','=w600-h450-p-k-no-nu')
+      .replace('=s1280','=w600-h450-p-k-no-nu')
+      .replace('=s1600','=w600-h450-p-k-no-nu');
   }
 
-  return 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5I6M0c8ijHf-placeholder/w400/default-real-estate.jpg';
+  return 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5I6M0c8ijHf-placeholder/w600/default-real-estate.jpg';
+}
+
+function esc(str){
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function renderBloggerFeed(data){
-  const app = document.getElementById('app');
-  const entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+  var app = document.getElementById('app');
+  var entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
 
   if (!entries.length) {
     app.className = 'empty';
@@ -167,15 +382,16 @@ function renderBloggerFeed(data){
     return;
   }
 
-  let html = '<div class="grid">';
+  var html = '<div class="scroller" id="lb-scroller"><div class="grid">';
 
-  for (let i = 0; i < Math.min(entries.length, 12); i++) {
-    const e = entries[i];
-    const raw = cleanTitle(e.title && e.title.$t ? e.title.$t : 'Không có tiêu đề');
+  for (var i=0;i<Math.min(entries.length,12);i++) {
+    var e = entries[i];
+    var rawTitle = cleanTitle(e.title && e.title.$t ? e.title.$t : 'Không có tiêu đề');
+    var fullHtml = (e.content && e.content.$t) ? e.content.$t : ((e.summary && e.summary.$t) ? e.summary.$t : '');
 
-    let link = '#';
+    var link = '#';
     if (e.link) {
-      for (let j = 0; j < e.link.length; j++) {
+      for (var j=0;j<e.link.length;j++) {
         if (e.link[j].rel === 'alternate') {
           link = e.link[j].href;
           break;
@@ -183,33 +399,80 @@ function renderBloggerFeed(data){
       }
     }
 
-    const img = extractBloggerImage(e);
-    const price = extractPrice(raw);
-    const area = extractArea(raw);
-    const location = extractLocation(raw);
-    const title = shortTitle(raw);
+    var img = extractBloggerImage(e);
+    var title = shortTitle(rawTitle);
+    var desc = extractDesc(e);
+    var price = extractPrice(rawTitle, fullHtml);
+    var location = extractLocation(rawTitle, fullHtml);
+    var type = extractType(rawTitle, fullHtml);
+    var area = extractArea(rawTitle, fullHtml);
+    var badges = extractBadge(fullHtml, rawTitle);
 
-    let badges = '';
-    badges += '<span class="badge badge-type">' + detectType(raw) + '</span>';
-    if (price !== 'Liên hệ') badges += '<span class="badge badge-sale">Giá tốt</span>';
+    var badgeHtml = '';
+    for (var b=0;b<badges.length;b++){
+      badgeHtml += '<span class="badge-chip '+badges[b].cls+'">'+esc(badges[b].text)+'</span>';
+    }
+    if (!badgeHtml) badgeHtml = '<span class="badge-chip badge-orange">Giá tốt</span>';
 
     html += ''
       + '<div class="card">'
-      +   '<a class="thumb-wrap" href="' + link + '" target="_blank" rel="noopener noreferrer">'
-      +     '<div class="badges">' + badges + '</div>'
-      +     '<img class="thumb" src="' + img + '" alt="">'
+      +   '<a class="thumb-wrap" href="'+link+'" target="_blank" rel="noopener noreferrer">'
+      +     '<div class="badge-left">'+badgeHtml+'</div>'
+      +     '<div class="badge-corner"><span>Giá rẻ</span></div>'
+      +     '<img class="thumb" src="'+img+'" alt="'+esc(title)+'">'
       +   '</a>'
       +   '<div class="content">'
-      +     '<a class="title" href="' + link + '" target="_blank" rel="noopener noreferrer">' + title + '</a>'
-      +     '<div class="meta">' + ((location || '') + (location && area ? ' · ' : '') + (area || '')) + '</div>'
-      +     '<div class="price">' + price + '</div>'
-      +     '<a class="btn" href="' + link + '" target="_blank" rel="noopener noreferrer">Xem chi tiết</a>'
+      +     '<a class="title" href="'+link+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a>'
+      +     '<div class="desc">'+esc(desc)+'</div>'
+      +     '<div class="meta">'
+      +       '<div class="meta-row"><span class="meta-ico">📍</span><span>'+esc(location || 'Đang cập nhật vị trí')+'</span></div>'
+      +       '<div class="meta-row"><span class="meta-ico">▫</span><span>Loại: '+esc(type || 'BĐS')+'</span></div>'
+      +       '<div class="meta-row"><span class="meta-ico">◫</span><span>Diện tích: '+esc(area || 'Liên hệ')+'</span></div>'
+      +     '</div>'
+      +     '<div class="sep"></div>'
+      +     '<div class="bottom">'
+      +       '<div class="price">'+esc(price)+'</div>'
+      +       '<a class="btn" href="'+link+'" target="_blank" rel="noopener noreferrer">Xem thêm</a>'
+      +     '</div>'
       +   '</div>'
       + '</div>';
   }
 
-  html += '</div>';
+  html += '</div></div>';
+  app.className = '';
   app.innerHTML = html;
+
+  var scroller = document.getElementById('lb-scroller');
+  if (!scroller) return;
+
+  var isDown = false, startX = 0, scrollLeft = 0;
+
+  scroller.addEventListener('mousedown', function(e){
+    isDown = true;
+    scroller.classList.add('dragging');
+    startX = e.pageX - scroller.offsetLeft;
+    scrollLeft = scroller.scrollLeft;
+  });
+
+  scroller.addEventListener('mouseleave', function(){
+    isDown = false;
+    scroller.classList.remove('dragging');
+  });
+
+  scroller.addEventListener('mouseup', function(){
+    isDown = false;
+    scroller.classList.remove('dragging');
+  });
+
+  scroller.addEventListener('mousemove', function(e){
+    if (!isDown) return;
+    e.preventDefault();
+    var x = e.pageX - scroller.offsetLeft;
+    var walk = (x - startX) * 1.2;
+    scroller.scrollLeft = scrollLeft - walk;
+  });
+
+  scroller.addEventListener('touchstart', function(){}, {passive:true});
 }
 </script>
 
