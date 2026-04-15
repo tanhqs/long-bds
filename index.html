@@ -5,65 +5,133 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BĐS Giá Rẻ</title>
   <style>
-    body{font-family:Arial,sans-serif;margin:0;padding:12px;background:#f5f5f5}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
-    .item{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-    .thumb{display:block;width:100%;height:160px;object-fit:cover;background:#eee}
-    .title{display:block;padding:10px 12px;font-size:15px;line-height:1.4;font-weight:700;color:#222;text-decoration:none}
-    .title:hover{color:#c62828}
-    .meta{padding:0 12px 12px;color:#666;font-size:13px}
-    .empty,.loading{padding:20px;text-align:center;color:#666}
+    *{box-sizing:border-box}
+    body{margin:0;padding:14px;font-family:Arial,sans-serif;background:#f3f4f6;color:#1f2937}
+    .wrap{max-width:1200px;margin:0 auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+    .card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s ease,box-shadow .18s ease}
+    .card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.12)}
+    .thumb-wrap{display:block;aspect-ratio:4/3;background:#e5e7eb;overflow:hidden}
+    .thumb{width:100%;height:100%;object-fit:cover;display:block}
+    .content{padding:12px}
+    .title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:48px;font-size:16px;line-height:1.45;font-weight:700;color:#111827;text-decoration:none;margin:0 0 8px}
+    .title:hover{color:#c81e1e}
+    .meta{font-size:13px;line-height:1.5;color:#6b7280;min-height:20px;margin-bottom:8px}
+    .price{font-size:18px;font-weight:700;color:#dc2626;margin-bottom:10px}
+    .btn{display:inline-block;padding:9px 12px;border-radius:10px;background:#111827;color:#fff;text-decoration:none;font-size:14px}
+    .btn:hover{opacity:.92}
+    .loading,.empty{padding:30px 12px;text-align:center;color:#6b7280}
   </style>
 </head>
 <body>
-  <div id="app" class="loading">Đang tải dữ liệu...</div>
+  <div class="wrap">
+    <div id="app" class="loading">Đang tải dữ liệu...</div>
+  </div>
 
   <script>
+    function cleanTitle(str){
+      return (str || '')
+        .replace(/\s+/g,' ')
+        .replace(/^\s*🔥\s*/,'')
+        .trim();
+    }
+
+    function extractPrice(title){
+      const t = title.toLowerCase();
+      const m = t.match(/(?:giá|chỉ)\s*([0-9.,x]+)\s*t[ỷy]/i);
+      if (m) return m[1].replace(/x/g,'.') + ' tỷ';
+      return '';
+    }
+
+    function extractArea(title){
+      const m = title.match(/(\d{2,4}\s*m2)/i);
+      return m ? m[1] : '';
+    }
+
+    function extractLocation(title){
+      const patterns = [
+        /(quận\s*\d+)/i,
+        /(q\.?\s*\d+)/i,
+        /(gò vấp)/i,
+        /(hóc môn)/i,
+        /(củ chi)/i,
+        /(tân bình)/i,
+        /(tân phú)/i,
+        /(bình thạnh)/i,
+        /(thủ đức)/i,
+        /(phường\s*[\w\d]+)/i
+      ];
+      for (const p of patterns){
+        const m = title.match(p);
+        if (m) return m[1];
+      }
+      return '';
+    }
+
+    function shortTitle(title){
+      return title
+        .replace(/,\s*giá.*$/i,'')
+        .replace(/,\s*chỉ.*$/i,'')
+        .replace(/\b\d+\s*m2\b/ig,'')
+        .replace(/\s+,/g,',')
+        .replace(/\s{2,}/g,' ')
+        .trim()
+        .replace(/,\s*$/,'');
+    }
+
     function renderBloggerFeed(data) {
-      var app = document.getElementById('app');
-      var entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+      const app = document.getElementById('app');
+      const entries = data?.feed?.entry || [];
 
       if (!entries.length) {
         app.className = 'empty';
-        app.innerHTML = 'Không có bài viết nào trong label này.';
+        app.innerHTML = 'Không có bài viết nào.';
         return;
       }
 
-      var html = '<div class="grid">';
-      for (var i = 0; i < Math.min(entries.length, 12); i++) {
-        var e = entries[i];
-        var title = e.title ? e.title.$t : 'Không có tiêu đề';
-        var link = '#';
+      let html = '<div class="grid">';
+
+      for (let i = 0; i < Math.min(entries.length, 12); i++) {
+        const e = entries[i];
+        const rawTitle = cleanTitle(e.title?.$t || 'Không có tiêu đề');
+
+        let link = '#';
         if (e.link) {
-          for (var j = 0; j < e.link.length; j++) {
-            if (e.link[j].rel === 'alternate') {
-              link = e.link[j].href;
-              break;
-            }
-          }
+          const alt = e.link.find(x => x.rel === 'alternate');
+          if (alt) link = alt.href;
         }
 
-        var img = '';
-        if (e.media$thumbnail && e.media$thumbnail.url) {
+        let img = '';
+        if (e.media$thumbnail?.url) {
           img = e.media$thumbnail.url
-            .replace('/s72-c/', '/s400/')
-            .replace('=s72-c', '=s400');
-        }
-
-        if (!img) {
+            .replace('/s72-c/', '/w800-h600-p-k-no-nu/')
+            .replace('=s72-c', '=w800-h600-p-k-no-nu');
+        } else {
           img = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5I6M0c8ijHf-placeholder/w800/default-real-estate.jpg';
         }
 
-        html += ''
-          + '<div class="item">'
-          +   '<a href="' + link + '" target="_blank" rel="noopener noreferrer">'
-          +     '<img class="thumb" src="' + img + '" alt="">'
-          +   '</a>'
-          +   '<a class="title" href="' + link + '" target="_blank" rel="noopener noreferrer">' + title + '</a>'
-          + '</div>';
-      }
-      html += '</div>';
+        const price = extractPrice(rawTitle);
+        const area = extractArea(rawTitle);
+        const location = extractLocation(rawTitle);
+        const title = shortTitle(rawTitle);
+        const metaParts = [location, area].filter(Boolean);
 
+        html += `
+          <div class="card">
+            <a class="thumb-wrap" href="${link}" target="_blank" rel="noopener noreferrer">
+              <img class="thumb" src="${img}" alt="${title}">
+            </a>
+            <div class="content">
+              <a class="title" href="${link}" target="_blank" rel="noopener noreferrer">${title}</a>
+              <div class="meta">${metaParts.length ? metaParts.join(' · ') : 'BĐS giá rẻ cập nhật mới'}</div>
+              <div class="price">${price || 'Liên hệ'}</div>
+              <a class="btn" href="${link}" target="_blank" rel="noopener noreferrer">Xem chi tiết</a>
+            </div>
+          </div>
+        `;
+      }
+
+      html += '</div>';
       app.className = '';
       app.innerHTML = html;
     }
