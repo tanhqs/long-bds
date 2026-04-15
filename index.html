@@ -1,43 +1,74 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BĐS Giá Rẻ</title>
-
-<style>
-body{font-family:Arial;margin:0;padding:10px;background:#f5f5f5}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
-.item{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.1)}
-.item img{width:100%;height:160px;object-fit:cover}
-.item a{display:block;padding:10px;font-weight:bold;color:#333;text-decoration:none}
-.item a:hover{color:#e60023}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BĐS Giá Rẻ</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;padding:12px;background:#f5f5f5}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .item{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    .thumb{display:block;width:100%;height:160px;object-fit:cover;background:#eee}
+    .title{display:block;padding:10px 12px;font-size:15px;line-height:1.4;font-weight:700;color:#222;text-decoration:none}
+    .title:hover{color:#c62828}
+    .meta{padding:0 12px 12px;color:#666;font-size:13px}
+    .empty,.loading{padding:20px;text-align:center;color:#666}
+  </style>
 </head>
-
 <body>
+  <div id="app" class="loading">Đang tải dữ liệu...</div>
 
-<div class="grid" id="list"></div>
+  <script>
+    function renderBloggerFeed(data) {
+      var app = document.getElementById('app');
+      var entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
 
-<script>
-fetch("https://long-bds.blogspot.com/feeds/posts/default/-/gia-re?alt=json")
-.then(res=>res.json())
-.then(data=>{
-  let html="";
-  data.feed.entry.forEach(e=>{
-    let link=e.link.find(l=>l.rel==="alternate").href;
-    let title=e.title.$t;
-    let img=(e.media$thumbnail)?e.media$thumbnail.url.replace("s72","s400"):"";
+      if (!entries.length) {
+        app.className = 'empty';
+        app.innerHTML = 'Không có bài viết nào trong label này.';
+        return;
+      }
 
-    html+=`
-    <div class="item">
-      <img src="${img}" alt="">
-      <a href="${link}" target="_blank">${title}</a>
-    </div>`;
-  });
-  document.getElementById("list").innerHTML=html;
-});
-</script>
+      var html = '<div class="grid">';
+      for (var i = 0; i < Math.min(entries.length, 12); i++) {
+        var e = entries[i];
+        var title = e.title ? e.title.$t : 'Không có tiêu đề';
+        var link = '#';
+        if (e.link) {
+          for (var j = 0; j < e.link.length; j++) {
+            if (e.link[j].rel === 'alternate') {
+              link = e.link[j].href;
+              break;
+            }
+          }
+        }
 
+        var img = '';
+        if (e.media$thumbnail && e.media$thumbnail.url) {
+          img = e.media$thumbnail.url
+            .replace('/s72-c/', '/s400/')
+            .replace('=s72-c', '=s400');
+        }
+
+        if (!img) {
+          img = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5I6M0c8ijHf-placeholder/w800/default-real-estate.jpg';
+        }
+
+        html += ''
+          + '<div class="item">'
+          +   '<a href="' + link + '" target="_blank" rel="noopener noreferrer">'
+          +     '<img class="thumb" src="' + img + '" alt="">'
+          +   '</a>'
+          +   '<a class="title" href="' + link + '" target="_blank" rel="noopener noreferrer">' + title + '</a>'
+          + '</div>';
+      }
+      html += '</div>';
+
+      app.className = '';
+      app.innerHTML = html;
+    }
+  </script>
+
+  <script src="https://long-bds.blogspot.com/feeds/posts/default/-/gia-re?alt=json-in-script&callback=renderBloggerFeed&max-results=12"></script>
 </body>
 </html>
