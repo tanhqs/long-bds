@@ -1,481 +1,456 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BĐS Giá Rẻ</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;padding:10px;font-family:Arial,sans-serif;background:#f5f7fb;color:#1f2937}
-.wrap{max-width:1280px;margin:0 auto}
-.scroller{
-  overflow-x:auto;
-  overflow-y:hidden;
-  -ms-overflow-style:none;
-  scrollbar-width:none;
-  cursor:grab;
-  padding-bottom:4px;
-}
-.scroller::-webkit-scrollbar{display:none}
-.scroller.dragging{cursor:grabbing;user-select:none}
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>BĐS Giá Rẻ</title>
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:16px;
-  min-width:1120px;
-}
+	<style>
+	*{box-sizing:border-box}
+	body{margin:0;padding:10px;font-family:Arial,sans-serif;background:#f5f7fb;color:#1f2937}
+	.wrap{max-width:1280px;margin:0 auto}
 
-.card{
-  background:#fff;
-  border:1px solid #dbe3ee;
-  border-radius:22px;
-  overflow:hidden;
-  box-shadow:0 2px 10px rgba(0,0,0,.05);
-  transition:.2s ease;
-}
-.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.10)}
+	.scroller{
+		overflow-x:auto;
+		overflow-y:hidden;
+		-ms-overflow-style:none;
+		scrollbar-width:none;
+		cursor:grab;
+		padding-bottom:4px;
+		-webkit-overflow-scrolling:touch;
+		touch-action:pan-x;
+	}
+	.scroller::-webkit-scrollbar{display:none}
+	.scroller.dragging{cursor:grabbing;user-select:none}
 
-.thumb-wrap{
-  position:relative;
-  display:block;
-  aspect-ratio:4/3;
-  overflow:hidden;
-  background:#e5e7eb;
-}
-.thumb{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
+	.row{
+		display:flex;
+		flex-wrap:nowrap;
+		gap:16px;
+		width:max-content;
+	}
 
-.badge-left{
-  position:absolute;
-  top:12px;
-  left:12px;
-  z-index:3;
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-}
-.badge-chip{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-  color:#fff;
-  line-height:1;
-  box-shadow:0 2px 6px rgba(0,0,0,.14);
-}
-.badge-orange{background:#f59e0b}
-.badge-red{background:#ef4444}
-.badge-dark{background:#0f172a}
+	.card{
+		flex:0 0 calc((100vw - 20px - 16px*3)/4);
+		max-width:calc((100vw - 20px - 16px*3)/4);
+		min-width:260px;
+		background:#fff;
+		border:1px solid #dbe3ee;
+		border-radius:22px;
+		overflow:hidden;
+		box-shadow:0 2px 10px rgba(0,0,0,.05);
+		transition:.2s ease;
+	}
+	.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.10)}
 
-.badge-corner{
-  position:absolute;
-  top:0;
-  right:0;
-  width:92px;
-  height:92px;
-  overflow:hidden;
-  z-index:2;
-}
-.badge-corner span{
-  position:absolute;
-  top:16px;
-  right:-28px;
-  width:120px;
-  text-align:center;
-  background:#f97316;
-  color:#fff;
-  font-size:12px;
-  font-weight:700;
-  padding:6px 0;
-  transform:rotate(45deg);
-  box-shadow:0 2px 6px rgba(0,0,0,.16);
-}
+	.thumb-wrap{
+		position:relative;
+		display:block;
+		aspect-ratio:4/3;
+		overflow:hidden;
+		background:#e5e7eb;
+	}
+	.thumb{width:100%;height:100%;object-fit:cover;display:block}
 
-.content{padding:14px 16px 16px}
-.title{
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-  min-height:64px;
-  margin:0 0 8px;
-  color:#1f2937;
-  text-decoration:none;
-  font-size:17px;
-  line-height:1.45;
-  font-weight:700;
-}
-.title:hover{color:#d9480f}
+	.badge-left{
+		position:absolute;
+		top:12px;
+		left:12px;
+		z-index:3;
+		display:flex;
+		gap:6px;
+		flex-wrap:wrap;
+	}
+	.badge-chip{
+		display:inline-block;
+		padding:6px 10px;
+		border-radius:999px;
+		font-size:12px;
+		font-weight:700;
+		color:#fff;
+		line-height:1;
+		box-shadow:0 2px 6px rgba(0,0,0,.14);
+	}
+	.badge-orange{background:#f59e0b}
+	.badge-red{background:#ef4444}
+	.badge-dark{background:#0f172a}
 
-.desc{
-  display:-webkit-box;
-  -webkit-line-clamp:3;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-  min-height:66px;
-  color:#64748b;
-  font-size:14px;
-  line-height:1.55;
-  margin-bottom:10px;
-}
+	.badge-corner{
+		position:absolute;
+		top:0;
+		right:0;
+		width:92px;
+		height:92px;
+		overflow:hidden;
+		z-index:2;
+	}
+	.badge-corner span{
+		position:absolute;
+		top:16px;
+		right:-28px;
+		width:120px;
+		text-align:center;
+		background:#f97316;
+		color:#fff;
+		font-size:12px;
+		font-weight:700;
+		padding:6px 0;
+		transform:rotate(45deg);
+		box-shadow:0 2px 6px rgba(0,0,0,.16);
+	}
 
-.meta{
-  display:grid;
-  gap:6px;
-  margin-bottom:12px;
-}
-.meta-row{
-  display:flex;
-  align-items:flex-start;
-  gap:8px;
-  color:#64748b;
-  font-size:14px;
-  line-height:1.45;
-}
-.meta-ico{
-  width:16px;
-  flex:0 0 16px;
-  text-align:center;
-  color:#64748b;
-  font-size:12px;
-  margin-top:2px;
-}
+	.content{padding:14px 16px 16px}
+	.title{
+		display:-webkit-box;
+		-webkit-line-clamp:2;
+		-webkit-box-orient:vertical;
+		overflow:hidden;
+		min-height:64px;
+		margin:0 0 8px;
+		color:#1f2937;
+		text-decoration:none;
+		font-size:17px;
+		line-height:1.45;
+		font-weight:700;
+	}
+	.title:hover{color:#d9480f}
 
-.sep{
-  height:1px;
-  background:#e2e8f0;
-  margin:10px 0 12px;
-}
+	.desc{
+		display:-webkit-box;
+		-webkit-line-clamp:3;
+		-webkit-box-orient:vertical;
+		overflow:hidden;
+		min-height:66px;
+		color:#64748b;
+		font-size:14px;
+		line-height:1.55;
+		margin-bottom:10px;
+	}
 
-.bottom{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.price{
-  color:#f97316;
-  font-size:18px;
-  font-weight:800;
-  line-height:1.2;
-}
-.btn{
-  display:inline-block;
-  padding:10px 14px;
-  border-radius:12px;
-  background:#0f766e;
-  color:#fff;
-  text-decoration:none;
-  font-size:14px;
-  font-weight:700;
-  white-space:nowrap;
-}
-.btn:hover{opacity:.92}
+	.meta{display:grid;gap:6px;margin-bottom:12px}
+	.meta-row{display:flex;align-items:flex-start;gap:8px;color:#64748b;font-size:14px;line-height:1.45}
+	.meta-ico{width:16px;flex:0 0 16px;text-align:center;color:#64748b;font-size:12px;margin-top:2px}
 
-.loading,.empty{
-  text-align:center;
-  color:#64748b;
-  padding:28px 10px;
-}
+	.sep{height:1px;background:#e2e8f0;margin:10px 0 12px}
 
-@media (max-width:991px){
-  .grid{
-    grid-template-columns:repeat(2,minmax(300px,1fr));
-    min-width:620px;
-  }
-}
-@media (max-width:640px){
-  body{padding:8px}
-  .grid{
-    grid-template-columns:repeat(1,minmax(280px,1fr));
-    min-width:300px;
-  }
-  .title{font-size:16px;min-height:58px}
-  .desc{font-size:13px;min-height:60px}
-  .meta-row{font-size:13px}
-  .price{font-size:17px}
-  .btn{font-size:13px;padding:9px 12px}
-}
-</style>
+	.bottom{display:flex;align-items:center;justify-content:space-between;gap:10px}
+	.price{color:#f97316;font-size:18px;font-weight:800;line-height:1.2}
+	.btn{
+		display:inline-block;
+		padding:10px 14px;
+		border-radius:12px;
+		background:#0f766e;
+		color:#fff;
+		text-decoration:none;
+		font-size:14px;
+		font-weight:700;
+		white-space:nowrap;
+	}
+	.btn:hover{opacity:.92}
+
+	.loading,.empty{text-align:center;color:#64748b;padding:28px 10px}
+
+	@media (max-width:991px){
+		.card{
+		flex:0 0 calc((100vw - 20px - 16px)/2);
+		max-width:calc((100vw - 20px - 16px)/2);
+		min-width:300px;
+		}
+	}
+
+	@media (max-width:640px){
+		body{padding:8px}
+		.card{
+		flex:0 0 calc(100vw - 16px);
+		max-width:calc(100vw - 16px);
+		min-width:280px;
+		}
+		.title{font-size:16px;min-height:58px}
+		.desc{font-size:13px;min-height:60px}
+		.meta-row{font-size:13px}
+		.price{font-size:17px}
+		.btn{font-size:13px;padding:9px 12px}
+	}
+	</style>
+	
 </head>
 <body>
-<div class="wrap">
-  <div id="app" class="loading">Đang tải dữ liệu...</div>
-</div>
+	<div class="wrap">
+		<div id="app" class="loading">Đang tải dữ liệu...</div>
+	</div>
 
-<script>
-function cleanText(str){
-  return (str || '')
-    .replace(/<br\s*\/?>/gi,' ')
-    .replace(/<[^>]*>/g,' ')
-    .replace(/\s+/g,' ')
-    .trim();
-}
+	<script>
+	function cleanText(str){
+		return (str || '')
+		.replace(/<br\s*\/?>/gi,' ')
+		.replace(/<[^>]*>/g,' ')
+		.replace(/\s+/g,' ')
+		.trim();
+	}
 
-function cleanTitle(str){
-  return cleanText(str).replace(/^[🔥⭐✔✅]+\s*/,'').trim();
-}
+	function cleanTitle(str){
+		return cleanText(str).replace(/^[🔥⭐✔✅]+\s*/,'').trim();
+	}
 
-function extractTag(html, tag){
-  var re = new RegExp('\\['+tag+'\\]([\\s\\S]*?)\\[\\/'+tag+'\\]','i');
-  var m = html.match(re);
-  return m ? cleanText(m[1]) : '';
-}
+	function extractTag(html, tag){
+		var re = new RegExp('\\['+tag+'\\]([\\s\\S]*?)\\[\\/'+tag+'\\]','i');
+		var m = html.match(re);
+		return m ? cleanText(m[1]) : '';
+	}
 
-function extractPrice(title, html){
-  var combined = (title + ' ' + html).toLowerCase();
+	function extractPrice(title, html){
+		var combined = (title + ' ' + html).toLowerCase();
 
-  var m = combined.match(/\[giaban\]([\s\S]*?)\[\/giaban\]/i);
-  if (m) return cleanText(m[1]);
+		var m = combined.match(/\[giaban\]([\s\S]*?)\[\/giaban\]/i);
+		if (m) return cleanText(m[1]);
 
-  m = combined.match(/(?:giá|chỉ)\s*([0-9]+(?:[.,][0-9x]+)?)\s*t[ỷy]/i);
-  if (m) return m[1].replace(/x/g,'').replace(',', '.') + ' tỷ';
+		m = combined.match(/(?:giá|chỉ)\s*([0-9]+(?:[.,][0-9x]+)?)\s*t[ỷy]/i);
+		if (m) return m[1].replace(/x/g,'').replace(',', '.') + ' tỷ';
 
-  m = combined.match(/([0-9]+(?:[.,][0-9x]+)?)\s*t[ỷy]/i);
-  if (m) return m[1].replace(/x/g,'').replace(',', '.') + ' tỷ';
+		m = combined.match(/([0-9]+(?:[.,][0-9x]+)?)\s*t[ỷy]/i);
+		if (m) return m[1].replace(/x/g,'').replace(',', '.') + ' tỷ';
 
-  m = combined.match(/([0-9]+(?:[.,][0-9]+)?)\s*tr[iệê]u/i);
-  if (m) return m[1].replace(',', '.') + ' triệu';
+		m = combined.match(/([0-9]+(?:[.,][0-9]+)?)\s*tr[iệê]u/i);
+		if (m) return m[1].replace(',', '.') + ' triệu';
 
-  return 'Liên hệ';
-}
+		return 'Liên hệ';
+	}
 
-function extractArea(title, html){
-  var area = extractTag(html,'dientich');
-  if (area) return area;
-  var m = title.match(/(\d{2,5}(?:[.,]\d+)?)\s*m2/i);
-  return m ? m[1] + ' m2' : '';
-}
+	function extractArea(title, html){
+		var area = extractTag(html,'dientich');
+		if (area) return area;
+		var m = title.match(/(\d{2,5}(?:[.,]\d+)?)\s*m2/i);
+		return m ? m[1] + ' m2' : '';
+	}
 
-function extractLocation(title, html){
-  var loc = extractTag(html,'vitri');
-  if (loc) return loc;
+	function extractLocation(title, html){
+		var loc = extractTag(html,'vitri');
+		if (loc) return loc;
 
-  var patterns = [
-    /(quận\s*\d+)/i, /(q\.?\s*\d+)/i, /(gò vấp)/i, /(hóc môn)/i,
-    /(củ chi)/i, /(tân bình)/i, /(tân phú)/i, /(thủ đức)/i,
-    /(phường\s*[\w\d]+)/i, /(p\.?\s*[\w\d]+)/i
-  ];
-  for (var i=0;i<patterns.length;i++){
-    var m = title.match(patterns[i]);
-    if (m) return m[1];
-  }
-  return '';
-}
+		var patterns = [
+		/(quận\s*\d+)/i, /(q\.?\s*\d+)/i, /(gò vấp)/i, /(hóc môn)/i,
+		/(củ chi)/i, /(tân bình)/i, /(tân phú)/i, /(thủ đức)/i,
+		/(phường\s*[\w\d]+)/i, /(p\.?\s*[\w\d]+)/i
+		];
+		for (var i=0;i<patterns.length;i++){
+		var m = title.match(patterns[i]);
+		if (m) return m[1];
+		}
+		return '';
+	}
 
-function extractType(title, html){
-  var loai = extractTag(html,'loai');
-  if (loai) return loai;
+	function extractType(title, html){
+		var loai = extractTag(html,'loai');
+		if (loai) return loai;
 
-  var t = title.toLowerCase();
-  if (t.includes('đất')) return 'Đất';
-  if (t.includes('biệt thự')) return 'Biệt thự';
-  if (t.includes('căn hộ')) return 'Căn hộ';
-  if (t.includes('nhà vườn')) return 'Nhà vườn';
-  if (t.includes('nhà')) return 'Nhà phố';
-  return 'BĐS';
-}
+		var t = title.toLowerCase();
+		if (t.includes('đất')) return 'Đất';
+		if (t.includes('biệt thự')) return 'Biệt thự';
+		if (t.includes('căn hộ')) return 'Căn hộ';
+		if (t.includes('nhà vườn')) return 'Nhà vườn';
+		if (t.includes('nhà')) return 'Nhà phố';
+		return 'BĐS';
+	}
 
-function extractBadge(html, title){
-  var hot = extractTag(html,'hot');
-  var phaply = extractTag(html,'phaply');
-  var badges = [];
+	function extractBadge(html, title){
+		var hot = extractTag(html,'hot');
+		var phaply = extractTag(html,'phaply');
+		var badges = [];
 
-  if (phaply) badges.push({text: phaply, cls:'badge-orange'});
-  if (!phaply && /sổ đỏ|shr|shr/i.test(html + ' ' + title)) badges.push({text:'SHR', cls:'badge-orange'});
+		if (phaply) badges.push({text: phaply, cls:'badge-orange'});
+		if (!phaply && /sổ đỏ|shr|shr/i.test(html + ' ' + title)) badges.push({text:'SHR', cls:'badge-orange'});
 
-  if (hot) badges.push({text: hot, cls:'badge-red'});
-  return badges;
-}
+		if (hot) badges.push({text: hot, cls:'badge-red'});
+		return badges;
+	}
 
-function shortTitle(t){
-  return cleanTitle(t)
-    .replace(/(?:,\s*)?(giá|chỉ)\s*[0-9.,x]+\s*t[ỷy].*$/i,'')
-    .replace(/(?:,\s*)?[0-9.,x]+\s*t[ỷy].*$/i,'')
-    .replace(/(?:,\s*)?\d{2,5}(?:[.,]\d+)?\s*m2/ig,'')
-    .replace(/^bán\s+/i,'')
-    .replace(/\s{2,}/g,' ')
-    .trim()
-    .replace(/[,\-–|:;]+$/,'');
-}
+	function shortTitle(t){
+		return cleanTitle(t)
+		.replace(/(?:,\s*)?(giá|chỉ)\s*[0-9.,x]+\s*t[ỷy].*$/i,'')
+		.replace(/(?:,\s*)?[0-9.,x]+\s*t[ỷy].*$/i,'')
+		.replace(/(?:,\s*)?\d{2,5}(?:[.,]\d+)?\s*m2/ig,'')
+		.replace(/^bán\s+/i,'')
+		.replace(/\s{2,}/g,' ')
+		.trim()
+		.replace(/[,\-–|:;]+$/,'');
+	}
 
-function extractDesc(entry){
-  var html = (entry.summary && entry.summary.$t) ? entry.summary.$t : '';
-  if (!html && entry.content && entry.content.$t) html = entry.content.$t;
+	function extractDesc(entry){
+		var html = (entry.summary && entry.summary.$t) ? entry.summary.$t : '';
+		if (!html && entry.content && entry.content.$t) html = entry.content.$t;
 
-  var mota = extractTag(html,'mota');
-  if (mota) return mota;
+		var mota = extractTag(html,'mota');
+		if (mota) return mota;
 
-  var chitiet = extractTag(html,'chitiet');
-  if (chitiet) return chitiet;
+		var chitiet = extractTag(html,'chitiet');
+		if (chitiet) return chitiet;
 
-  return cleanText(html).slice(0,180);
-}
+		return cleanText(html).slice(0,180);
+	}
 
-function extractBloggerImage(entry){
-  var rawImg = '';
-  var html = (entry.content && entry.content.$t) ? entry.content.$t : '';
-  if (!html && entry.summary && entry.summary.$t) html = entry.summary.$t;
+	function extractBloggerImage(entry){
+		var rawImg = '';
+		var html = (entry.content && entry.content.$t) ? entry.content.$t : '';
+		if (!html && entry.summary && entry.summary.$t) html = entry.summary.$t;
 
-  if (html) {
-    var imgMatches = html.match(/<img[^>]+src="([^"]+)"/ig);
-    if (imgMatches) {
-      for (var i=0;i<imgMatches.length;i++) {
-        var m = imgMatches[i].match(/src="([^"]+)"/i);
-        if (m && m[1] && m[1].indexOf('blogger.googleusercontent.com/img') !== -1) {
-          rawImg = m[1];
-          break;
-        }
-      }
-    }
-  }
+		if (html) {
+		var imgMatches = html.match(/<img[^>]+src="([^"]+)"/ig);
+		if (imgMatches) {
+			for (var i=0;i<imgMatches.length;i++) {
+			var m = imgMatches[i].match(/src="([^"]+)"/i);
+			if (m && m[1] && m[1].indexOf('blogger.googleusercontent.com/img') !== -1) {
+				rawImg = m[1];
+				break;
+			}
+			}
+		}
+		}
 
-  if (!rawImg && html) {
-    var linkMatches = html.match(/<a[^>]+href="([^"]+)"/ig);
-    if (linkMatches) {
-      for (var j=0;j<linkMatches.length;j++) {
-        var n = linkMatches[j].match(/href="([^"]+)"/i);
-        if (n && n[1] && n[1].indexOf('blogger.googleusercontent.com/img') !== -1 && /\.(jpg|jpeg|png|webp)(\?|$)/i.test(n[1])) {
-          rawImg = n[1];
-          break;
-        }
-      }
-    }
-  }
+		if (!rawImg && html) {
+		var linkMatches = html.match(/<a[^>]+href="([^"]+)"/ig);
+		if (linkMatches) {
+			for (var j=0;j<linkMatches.length;j++) {
+			var n = linkMatches[j].match(/href="([^"]+)"/i);
+			if (n && n[1] && n[1].indexOf('blogger.googleusercontent.com/img') !== -1 && /\.(jpg|jpeg|png|webp)(\?|$)/i.test(n[1])) {
+				rawImg = n[1];
+				break;
+			}
+			}
+		}
+		}
 
-  if (!rawImg && entry.media$thumbnail && entry.media$thumbnail.url) {
-    rawImg = entry.media$thumbnail.url;
-  }
+		if (!rawImg && entry.media$thumbnail && entry.media$thumbnail.url) {
+		rawImg = entry.media$thumbnail.url;
+		}
 
-  if (rawImg && rawImg.indexOf('blogger.googleusercontent.com/img') !== -1) {
-    return rawImg
-      .replace('/s72-c/','/w600-h450-p-k-no-nu/')
-      .replace('/s600/','/w600-h450-p-k-no-nu/')
-      .replace('/s1280/','/w600-h450-p-k-no-nu/')
-      .replace('/s1600/','/w600-h450-p-k-no-nu/')
-      .replace('=s72-c','=w600-h450-p-k-no-nu')
-      .replace('=s600','=w600-h450-p-k-no-nu')
-      .replace('=s1280','=w600-h450-p-k-no-nu')
-      .replace('=s1600','=w600-h450-p-k-no-nu');
-  }
+		if (rawImg && rawImg.indexOf('blogger.googleusercontent.com/img') !== -1) {
+		return rawImg
+			.replace('/s72-c/','/w600-h450-p-k-no-nu/')
+			.replace('/s600/','/w600-h450-p-k-no-nu/')
+			.replace('/s1280/','/w600-h450-p-k-no-nu/')
+			.replace('/s1600/','/w600-h450-p-k-no-nu/')
+			.replace('=s72-c','=w600-h450-p-k-no-nu')
+			.replace('=s600','=w600-h450-p-k-no-nu')
+			.replace('=s1280','=w600-h450-p-k-no-nu')
+			.replace('=s1600','=w600-h450-p-k-no-nu');
+		}
 
-  return 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5I6M0c8ijHf-placeholder/w600/default-real-estate.jpg';
-}
+		return 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5I6M0c8ijHf-placeholder/w600/default-real-estate.jpg';
+	}
 
-function esc(str){
-  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+	function esc(str){
+		return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+	}
 
-function renderBloggerFeed(data){
-  var app = document.getElementById('app');
-  var entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+	function renderBloggerFeed(data){
+		var app = document.getElementById('app');
+		var entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
 
-  if (!entries.length) {
-    app.className = 'empty';
-    app.innerHTML = 'Không có bài viết nào.';
-    return;
-  }
+		if (!entries.length) {
+		app.className = 'empty';
+		app.innerHTML = 'Không có bài viết nào.';
+		return;
+		}
 
-  var html = '<div class="scroller" id="lb-scroller"><div class="grid">';
+		var html = '<div class="scroller" id="lb-scroller"><div class="row">';
 
-  for (var i=0;i<Math.min(entries.length,12);i++) {
-    var e = entries[i];
-    var rawTitle = cleanTitle(e.title && e.title.$t ? e.title.$t : 'Không có tiêu đề');
-    var fullHtml = (e.content && e.content.$t) ? e.content.$t : ((e.summary && e.summary.$t) ? e.summary.$t : '');
+		for (var i=0;i<Math.min(entries.length,12);i++) {
+		var e = entries[i];
+		var rawTitle = cleanTitle(e.title && e.title.$t ? e.title.$t : 'Không có tiêu đề');
+		var fullHtml = (e.content && e.content.$t) ? e.content.$t : ((e.summary && e.summary.$t) ? e.summary.$t : '');
 
-    var link = '#';
-    if (e.link) {
-      for (var j=0;j<e.link.length;j++) {
-        if (e.link[j].rel === 'alternate') {
-          link = e.link[j].href;
-          break;
-        }
-      }
-    }
+		var link = '#';
+		if (e.link) {
+			for (var j=0;j<e.link.length;j++) {
+			if (e.link[j].rel === 'alternate') {
+				link = e.link[j].href;
+				break;
+			}
+			}
+		}
 
-    var img = extractBloggerImage(e);
-    var title = shortTitle(rawTitle);
-    var desc = extractDesc(e);
-    var price = extractPrice(rawTitle, fullHtml);
-    var location = extractLocation(rawTitle, fullHtml);
-    var type = extractType(rawTitle, fullHtml);
-    var area = extractArea(rawTitle, fullHtml);
-    var badges = extractBadge(fullHtml, rawTitle);
+		var img = extractBloggerImage(e);
+		var title = shortTitle(rawTitle);
+		var desc = extractDesc(e);
+		var price = extractPrice(rawTitle, fullHtml);
+		var location = extractLocation(rawTitle, fullHtml);
+		var type = extractType(rawTitle, fullHtml);
+		var area = extractArea(rawTitle, fullHtml);
+		var badges = extractBadge(fullHtml, rawTitle);
 
-    var badgeHtml = '';
-    for (var b=0;b<badges.length;b++){
-      badgeHtml += '<span class="badge-chip '+badges[b].cls+'">'+esc(badges[b].text)+'</span>';
-    }
-    if (!badgeHtml) badgeHtml = '<span class="badge-chip badge-orange">Giá tốt</span>';
+		var badgeHtml = '';
+		for (var b=0;b<badges.length;b++){
+			badgeHtml += '<span class="badge-chip '+badges[b].cls+'">'+esc(badges[b].text)+'</span>';
+		}
+		if (!badgeHtml) badgeHtml = '<span class="badge-chip badge-orange">Giá tốt</span>';
 
-    html += ''
-      + '<div class="card">'
-      +   '<a class="thumb-wrap" href="'+link+'" target="_blank" rel="noopener noreferrer">'
-      +     '<div class="badge-left">'+badgeHtml+'</div>'
-      +     '<div class="badge-corner"><span>Giá rẻ</span></div>'
-      +     '<img class="thumb" src="'+img+'" alt="'+esc(title)+'">'
-      +   '</a>'
-      +   '<div class="content">'
-      +     '<a class="title" href="'+link+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a>'
-      +     '<div class="desc">'+esc(desc)+'</div>'
-      +     '<div class="meta">'
-      +       '<div class="meta-row"><span class="meta-ico">📍</span><span>'+esc(location || 'Đang cập nhật vị trí')+'</span></div>'
-      +       '<div class="meta-row"><span class="meta-ico">▫</span><span>Loại: '+esc(type || 'BĐS')+'</span></div>'
-      +       '<div class="meta-row"><span class="meta-ico">◫</span><span>Diện tích: '+esc(area || 'Liên hệ')+'</span></div>'
-      +     '</div>'
-      +     '<div class="sep"></div>'
-      +     '<div class="bottom">'
-      +       '<div class="price">'+esc(price)+'</div>'
-      +       '<a class="btn" href="'+link+'" target="_blank" rel="noopener noreferrer">Xem thêm</a>'
-      +     '</div>'
-      +   '</div>'
-      + '</div>';
-  }
+		html += ''
+			+ '<div class="card">'
+			+	 '<a class="thumb-wrap" href="'+link+'" target="_blank" rel="noopener noreferrer">'
+			+		 '<div class="badge-left">'+badgeHtml+'</div>'
+			+		 '<div class="badge-corner"><span>Giá rẻ</span></div>'
+			+		 '<img class="thumb" src="'+img+'" alt="'+esc(title)+'">'
+			+	 '</a>'
+			+	 '<div class="content">'
+			+		 '<a class="title" href="'+link+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a>'
+			+		 '<div class="desc">'+esc(desc)+'</div>'
+			+		 '<div class="meta">'
+			+			 '<div class="meta-row"><span class="meta-ico">📍</span><span>'+esc(location || 'Đang cập nhật vị trí')+'</span></div>'
+			+			 '<div class="meta-row"><span class="meta-ico">🏘️</span><span>Loại: '+esc(type || 'BĐS')+'</span></div>'
+			+			 '<div class="meta-row"><span class="meta-ico">📐</span><span>Diện tích: '+esc(area || 'Liên hệ')+'</span></div>'
+			+		 '</div>'
+			+		 '<div class="sep"></div>'
+			+		 '<div class="bottom">'
+			+			 '<div class="price">'+esc(price)+'</div>'
+			+			 '<a class="btn" href="'+link+'" target="_blank" rel="noopener noreferrer">Xem thêm</a>'
+			+		 '</div>'
+			+	 '</div>'
+			+ '</div>';
+		}
 
-  html += '</div></div>';
-  app.className = '';
-  app.innerHTML = html;
+		html += '</div></div>';
+		app.className = '';
+		app.innerHTML = html;
 
-  var scroller = document.getElementById('lb-scroller');
-  if (!scroller) return;
+		var scroller = document.getElementById('lb-scroller');
+		if (!scroller) return;
 
-  var isDown = false, startX = 0, scrollLeft = 0;
+		var isDown = false;
+		var startX = 0;
+		var scrollLeft = 0;
+		var moved = false;
 
-  scroller.addEventListener('mousedown', function(e){
-    isDown = true;
-    scroller.classList.add('dragging');
-    startX = e.pageX - scroller.offsetLeft;
-    scrollLeft = scroller.scrollLeft;
-  });
+		scroller.addEventListener('mousedown', function(e){
+		isDown = true;
+		moved = false;
+		scroller.classList.add('dragging');
+		startX = e.pageX;
+		scrollLeft = scroller.scrollLeft;
+		});
 
-  scroller.addEventListener('mouseleave', function(){
-    isDown = false;
-    scroller.classList.remove('dragging');
-  });
+		window.addEventListener('mouseup', function(){
+		isDown = false;
+		scroller.classList.remove('dragging');
+		});
 
-  scroller.addEventListener('mouseup', function(){
-    isDown = false;
-    scroller.classList.remove('dragging');
-  });
+		scroller.addEventListener('mousemove', function(e){
+		if (!isDown) return;
+		var dx = e.pageX - startX;
+		if (Math.abs(dx) > 5) moved = true;
+		scroller.scrollLeft = scrollLeft - dx;
+		if (moved) e.preventDefault();
+		});
 
-  scroller.addEventListener('mousemove', function(e){
-    if (!isDown) return;
-    e.preventDefault();
-    var x = e.pageX - scroller.offsetLeft;
-    var walk = (x - startX) * 1.2;
-    scroller.scrollLeft = scrollLeft - walk;
-  });
+		scroller.addEventListener('click', function(e){
+		if (moved) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+		}, true);
+	}
+	</script>
 
-  scroller.addEventListener('touchstart', function(){}, {passive:true});
-}
-</script>
-
-<script src="https://long-bds.blogspot.com/feeds/posts/default/-/gia-re?alt=json-in-script&callback=renderBloggerFeed&max-results=4"></script>
+	<script src="https://long-bds.blogspot.com/feeds/posts/default/-/gia-re?alt=json-in-script&callback=renderBloggerFeed&max-results=4"></script>
+	
 </body>
 </html>
