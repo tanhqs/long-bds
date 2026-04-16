@@ -129,6 +129,17 @@
 
 	.meta{display:grid;gap:6px;margin-bottom:12px}
 	.meta-row{display:flex;align-items:flex-start;gap:8px;color:#64748b;font-size:14px;line-height:1.45}
+	.meta-row{
+	  display:flex;
+	  align-items:center;
+	  gap:8px;
+	  white-space:nowrap;
+	}
+
+	.meta-row span:last-child{
+	  overflow:hidden;
+	  text-overflow:ellipsis;
+	}
 	.meta-ico{width:16px;flex:0 0 16px;text-align:center;color:#64748b;font-size:12px;margin-top:2px}
 
 	.sep{height:1px;background:#e2e8f0;margin:10px 0 12px}
